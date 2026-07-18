@@ -4,7 +4,7 @@ The ReferMate user app — a React 18 + Vite SPA deployed on Vercel. See the [ro
 
 ## Screens
 
-Defined in [src/routes.tsx](src/routes.tsx); protected routes require a Clerk session.
+Defined in `src/routes.tsx`; protected routes require a Clerk session.
 
 | Route | What it does |
 |---|---|
@@ -17,8 +17,8 @@ Defined in [src/routes.tsx](src/routes.tsx); protected routes require a Clerk se
 
 ## How it's wired
 
-- **API access** ([src/hooks/useAPIClient.ts](src/hooks/useAPIClient.ts)): a single Axios instance with interceptors — Clerk token injected per request, missing token or a `401` redirects to `/login`. No auth logic lives in components.
-- **Server state**: TanStack Query v5 throughout — [src/hooks/](src/hooks/) is organized by domain (`auth/`, `profile/`, `threads/`, `messages/`), each wrapping the raw calls in [src/services/](src/services/). Components consume hooks, never Axios.
+- **API access** (`src/hooks/useAPIClient.ts`): a single Axios instance with interceptors — Clerk token injected per request, missing token or a `401` redirects to `/login`. No auth logic lives in components.
+- **Server state**: TanStack Query v5 throughout — `src/hooks/` is organized by domain (`auth/`, `profile/`, `threads/`, `messages/`), each wrapping the raw calls in `src/services/`. Components consume hooks, never Axios.
 - **Forms**: React Hook Form + Zod resolvers, mirroring the backend's Zod schemas so validation errors match on both sides.
 - **Async UX**: onboarding polls the profile status machine (`PROCESSING → PARTIAL`) to reveal auto-filled fields when the resume worker finishes; thread detail surfaces granular Gmail sync errors (missing refresh token, insufficient permissions, thread deleted) with a reconnect prompt instead of a generic failure.
 - **Rendering safety**: synced email HTML is sanitized with DOMPurify before display.
@@ -32,4 +32,4 @@ npm i
 npm run dev               # http://localhost:5173
 ```
 
-Expects [outreach_backend](../outreach_backend/) at `VITE_BACKEND_BASE_URL` and a Clerk publishable key — see [.env.example](.env.example). Deployment: `vite build` + the SPA rewrite in [vercel.json](vercel.json).
+Expects [outreach_backend](../outreach_backend/) at `VITE_BACKEND_BASE_URL` and a Clerk publishable key — see [.env.example](.env.example). Deployment: `vite build` + the SPA rewrite in `vercel.json`.

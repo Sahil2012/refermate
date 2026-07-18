@@ -84,12 +84,51 @@ flowchart TB
 
 The two flows at a glance: **message generation** runs synchronously through the API (`application → API → LLM router → Gmail`), while **resume parsing** is fully async (`API → Redis queue → resume_worker → Postgres`) — the app polls the profile status instead of waiting.
 
+<details>
+<summary><b>Zoom in: the async resume pipeline</b> — enqueue, retries, dead-letter queue</summary>
+
+<br/>
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant App as application
+    participant API as outreach_backend
+    participant Q as Redis (BullMQ)
+    participant W as resume_worker
+    participant S as Supabase Storage
+    participant G as Gemini
+    participant DB as PostgreSQL
+
+    App->>API: PUT /profile/resume (PDF)
+    API->>S: store PDF
+    API->>Q: enqueue {userId, resumePath}
+    API-->>App: 200 — profile status: PROCESSING
+    Note over App: polls profile status
+
+    Q->>W: resume-processing job (concurrency 3)
+    W->>S: download PDF
+    W->>G: extracted text → structured output (Zod schema)
+    W->>DB: transactional ingest (profile · skills · experience)
+    W->>DB: status → PARTIAL
+    Note over App: poll sees PARTIAL → shows auto-filled profile
+
+    alt job fails
+        Q->>W: retry ×3, exponential backoff
+        W->>Q: exhausted → resume-processing-dlq
+    end
+```
+
+Ingestion is built to be safely re-runnable (retries mean any step can execute twice) — details in [resume_worker/README.md](resume_worker/README.md).
+
+</details>
+
 ## Key technical decisions
 
-- **Resume parsing is a separate worker, not an API call** ([resume_worker/src/server.ts](resume_worker/src/server.ts)). PDF parsing is slow and failure-prone (format variance, LLM latency), so uploads enqueue a BullMQ job and return immediately. The worker runs 3 jobs concurrently, retries 3× with exponential backoff, and dead-letters exhausted jobs — a bad file never blocks the UI or burns an API timeout. The frontend polls a profile status machine (`INCOMPLETE → PROCESSING → PARTIAL → COMPLETE`) instead of holding a request open.
-- **One LLM interface, multiple vendors** ([llmClient.ts](outreach_backend/src/apis/llmClient.ts)). Generation tries Gemini 2.5 Flash Lite first and falls back to GPT-4o mini, behind a single `callLLM` — adding a vendor is a config entry, not a refactor. Every response is parsed through LangChain structured output against a Zod schema, so the app never string-scrapes LLM text: output is valid `{subject, body}` JSON or the call fails cleanly and the credit is refunded.
-- **Gmail is the source of truth for conversations** ([externalMailService.ts](outreach_backend/src/service/externalMailService.ts)). No mail infrastructure to run and no email bodies to store: messages go out as RFC822 MIME through the Gmail API, and the DB keeps only Gmail's thread/message IDs. Replies sync lazily on view — fetched, deduplicated by external ID, quote blocks stripped. Deliverability and history stay in the user's own inbox.
-- **Each message type is a strategy, not a branch of one mega-prompt** ([email/context.ts](outreach_backend/src/service/email/context.ts)). Cold, tailored, follow-up, and thank-you each own a prompt template and compose different context — resume data, job description, prior thread messages. New types plug into the strategy map without touching the core service.
+- **Resume parsing is a separate worker, not an API call.** PDF parsing is slow and failure-prone (format variance, LLM latency), so uploads enqueue a BullMQ job and return immediately. The worker runs 3 jobs concurrently, retries 3× with exponential backoff, and dead-letters exhausted jobs — a bad file never blocks the UI or burns an API timeout. The frontend polls a profile status machine (`INCOMPLETE → PROCESSING → PARTIAL → COMPLETE`) instead of holding a request open.
+- **One LLM interface, multiple vendors.** Generation tries Gemini 2.5 Flash Lite first and falls back to GPT-4o mini, behind a single `callLLM` — adding a vendor is a config entry, not a refactor. Every response is parsed through LangChain structured output against a Zod schema, so the app never string-scrapes LLM text: output is valid `{subject, body}` JSON or the call fails cleanly and the credit is refunded.
+- **Gmail is the source of truth for conversations.** No mail infrastructure to run and no email bodies to store: messages go out as RFC822 MIME through the Gmail API, and the DB keeps only Gmail's thread/message IDs. Replies sync lazily on view — fetched, deduplicated by external ID, quote blocks stripped. Deliverability and history stay in the user's own inbox.
+- **Each message type is a strategy, not a branch of one mega-prompt.** Cold, tailored, follow-up, and thank-you each own a prompt template and compose different context — resume data, job description, prior thread messages. New types plug into the strategy map without touching the core service.
 - **Credits gate generation, not sending.** A credit is deducted when the LLM runs — the expensive step — and refunded if the call fails. Per-user, Redis-backed rate limiting sits in front of the API, so limits hold across instances.
 - **Auth is boring on purpose.** Clerk handles sessions, Google OAuth, and Svix-verified webhooks — vendor solutions for solved problems; the engineering time went into the generation and Gmail pipelines instead.
 
@@ -129,7 +168,7 @@ cd landing
 npm i && npm run dev
 ```
 
-Each service has its own README with the next level of depth: [outreach_backend](outreach_backend/README.md) (API surface, ER diagram, message lifecycle) · [resume_worker](resume_worker/README.md) (pipeline sequence diagram, failure handling) · [application](application/README.md) (screens, data-flow wiring) · [landing](landing/README.md)
+Each service has its own README with the next level of depth: [outreach_backend](outreach_backend/README.md) (API surface, message lifecycle, state machines) · [resume_worker](resume_worker/README.md) (pipeline sequence diagram, failure handling) · [application](application/README.md) (screens, data-flow wiring) · [landing](landing/README.md)
 
 ## Status
 

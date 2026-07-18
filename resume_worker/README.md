@@ -34,9 +34,9 @@ sequenceDiagram
     end
 ```
 
-**Extraction** ([extractDataFromResume.ts](src/service/extractDataFromResume.ts)): `pdf-parse` pulls the text, Gemini 2.5 Flash returns structured output validated against the Zod schema in [schema.ts](src/schema/schema.ts) — experiences, skills (with categories), projects, notice period, achievements. The prompt instructs the model to extract only what's explicitly stated; anything else comes back `null`, never hallucinated.
+**Extraction** (`extractDataFromResume.ts`): `pdf-parse` pulls the text, Gemini 2.5 Flash returns structured output validated against the Zod schema in `schema.ts` — experiences, skills (with categories), projects, notice period, achievements. The prompt instructs the model to extract only what's explicitly stated; anything else comes back `null`, never hallucinated.
 
-**Ingestion** ([processResume.ts](src/service/processResume.ts) + [ingestion/](src/ingestion/)) is built to be safely re-runnable, because retries mean any step can execute twice:
+**Ingestion** (`processResume.ts` + `src/ingestion/`) is built to be safely re-runnable, because retries mean any step can execute twice:
 
 - Skills are deduplicated against the existing dictionary and inserted with `createMany({ skipDuplicates })`
 - Experience uses delete-then-insert, so a retry can't double-append work history
@@ -44,7 +44,7 @@ sequenceDiagram
 
 ## Failure handling
 
-Jobs retry 3 times with exponential backoff (options set at enqueue time by the backend). After the third failure, the job payload is pushed to the `resume-processing-dlq` Redis list ([server.ts](src/server.ts)) — nothing is silently dropped, and stuck resumes can be inspected and replayed:
+Jobs retry 3 times with exponential backoff (options set at enqueue time by the backend). After the third failure, the job payload is pushed to the `resume-processing-dlq` Redis list (`src/server.ts`) — nothing is silently dropped, and stuck resumes can be inspected and replayed:
 
 ```bash
 redis-cli LRANGE resume-processing-dlq 0 -1
