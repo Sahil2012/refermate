@@ -14,6 +14,11 @@ configDotenv();
 const PORT = process.env.PORT;
 const app = express();
 
+// Render's health check hits this path and expects a 2xx response.
+app.get("/", (req, res) => {
+  res.status(200).send("ok");
+});
+
 // Use Middlewares
 app.use(clerkMiddleware({ debug: process.env.NODE_ENV === "development" }));
 
