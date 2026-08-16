@@ -8,7 +8,7 @@ import threadRoutes from "./routes/threadRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import { requireAuth } from "./middlleware/requireAuth.js";
 import { errorHandler, notFoundHandler } from "./middlleware/errorHandler.js";
-import { rateLimiter } from "./middlleware/ratelimiter.js";
+import { createRateLimiter } from "./middlleware/ratelimiter.js";
 configDotenv();
 
 const PORT = process.env.PORT;
@@ -34,9 +34,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Routers
-app.use("/profile", requireAuth, rateLimiter, profileRouter);
-app.use("/threads", requireAuth, rateLimiter, threadRoutes);
-app.use("/messages", requireAuth, rateLimiter, messageRoutes);
+app.use("/profile", requireAuth, createRateLimiter("profile"), profileRouter);
+app.use("/threads", requireAuth, createRateLimiter("threads"), threadRoutes);
+app.use("/messages", requireAuth, messageRoutes);
 
 // 404 handler for undefined routes (must be after all route definitions)
 app.use(notFoundHandler);

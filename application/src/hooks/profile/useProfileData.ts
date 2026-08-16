@@ -31,7 +31,6 @@ export const useProfile = (props?: UseProfileProps) => {
         return res;
       },
       staleTime: 5 * 60 * 1000,
-      retry: 3,
       refetchInterval: (query) => {
         const newData = query.state.data;
 

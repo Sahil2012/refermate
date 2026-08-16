@@ -2,13 +2,16 @@ import { useProfile } from "@/hooks/profile/useProfileData";
 import { useUser } from "@clerk/clerk-react";
 import { Navigate, Outlet, useLocation } from "react-router";
 import { Loader } from "@/components/ui/loader";
+import { isRateLimitError } from "@/lib/queryRetry";
 
 function ProtectedRoute() {
   const { user, isLoaded: isUserLoaded } = useUser();
   const { data: profile, isLoading, error } = useProfile();
   const location = useLocation();
 
-  if (error) {
+  // A 429 is transient and already being retried by the query itself — surfacing it as a
+  // full-page error would kick the user out for what's usually a few seconds of backoff.
+  if (error && !isRateLimitError(error)) {
     const err = new Error("Failed to fetch profile. Please try again later");
     err.name = "Unable to reach servers";
     throw err;
