@@ -17,7 +17,7 @@ const BillingInfo = () => {
   return (
     <>
       <Card>
-        <CardHeader className="border-b border-border/40 px-6 py-6">
+        <CardHeader className="border-b border-border/40 px-6">
           <div className="flex items-center gap-2">
             <CreditCard className="w-5 h-5 text-primary" />
             <CardTitle>Billing Information</CardTitle>
@@ -26,7 +26,7 @@ const BillingInfo = () => {
             Manage your credits and recharge options
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-6 space-y-6">
+        <CardContent className="space-y-6">
           <CreditDisplay onOpenChange={(val) => setOpen(val)} />
           <PlanInformation />
         </CardContent>

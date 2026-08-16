@@ -15,7 +15,7 @@ import { ROUTES } from "@/lib/consts/routesConsts";
 export default function LoginPage() {
   return (
     <Card>
-      <CardHeader className="mb-2">
+      <CardHeader className="mb-2 text-center">
         <CardTitle>Welcome back</CardTitle>
         <CardDescription>
           Enter your email to sign in to your account

@@ -24,7 +24,7 @@ const PersonalInfo = () => {
 
   return (
     <Card>
-      <CardHeader className="border-b border-border/40 px-6 py-6">
+      <CardHeader className="border-b border-border/40 px-6">
         <div className="flex items-center gap-2">
           <User className="w-5 h-5 text-primary" />
           <CardTitle>Personal Information</CardTitle>
@@ -33,7 +33,7 @@ const PersonalInfo = () => {
           Update your photo and personal details
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent>
         <div className="flex gap-12 px-6">
           <ProfileImage />
           <ProfileInfoForm

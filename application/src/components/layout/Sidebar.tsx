@@ -51,9 +51,9 @@ export function Sidebar({ className }: { className?: string }) {
 
   return (
     <div className={cn("pb-12 min-h-screen", className)}>
-      <div className="space-y-4 py-6">
+      <div className="space-y-4 pt-4 pb-6">
         <div className="px-3 py-2">
-          <FullLogo to="/" />
+          <FullLogo to="/" size="sm" className="mb-7 ml-3" />
           <div className="space-y-1">
             {routes.map((route) => (
               <Button

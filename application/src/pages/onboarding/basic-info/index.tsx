@@ -59,7 +59,7 @@ export default function BasicInfoPage() {
       description="Let's get you set up. First, tell us a bit about yourself."
     >
       <Card>
-        <CardContent className="py-6">
+        <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">

@@ -12,8 +12,8 @@ interface DisplayCardProps {
 
 const DisplayCard = ({ experience, onEdit, onDelete }: DisplayCardProps) => {
   return (
-    <Card className="bg-muted/10 border-border/40">
-      <CardContent className="p-4 flex justify-between items-start">
+    <Card size="sm" className="bg-muted/10 border-border/40">
+      <CardContent className="flex justify-between items-start">
         <div>
           <h4 className="font-semibold">{experience.role}</h4>
           <p className="text-sm text-muted-foreground">{experience.company}</p>

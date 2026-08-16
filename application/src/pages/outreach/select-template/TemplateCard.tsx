@@ -18,7 +18,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
   return (
     <Card
       className={cn(
-        "cursor-pointer transition-all hover:shadow-md py-6 relative overflow-hidden h-full",
+        "cursor-pointer transition-all hover:shadow-md relative overflow-hidden h-full",
         isSelected
           ? "border-primary ring-2 ring-primary/20 bg-primary/5"
           : "hover:border-primary/50",

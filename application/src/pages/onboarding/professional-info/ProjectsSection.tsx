@@ -56,7 +56,7 @@ export function ProjectsSection({
 
   return (
     <Card>
-      <CardContent className="py-6 space-y-6">
+      <CardContent className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-primary" />
@@ -67,8 +67,8 @@ export function ProjectsSection({
         <div className="space-y-4">
           {/* Saved Projects List */}
           {projects.map((proj, index) => (
-            <Card key={index} className="bg-muted/10 border-border/40">
-              <CardContent className="p-4 flex justify-between items-start">
+            <Card key={index} size="sm" className="bg-muted/10 border-border/40">
+              <CardContent className="flex justify-between items-start">
                 <div>
                   <h4 className="font-semibold">{proj.title}</h4>
                   {proj.project_url && (

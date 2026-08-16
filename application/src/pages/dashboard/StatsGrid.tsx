@@ -41,7 +41,7 @@ export const StatsGrid = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {data.map((item) => (
         <Card key={item.label}>
-          <CardContent className="p-6 flex items-center justify-between">
+          <CardContent className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
                 {item.label}

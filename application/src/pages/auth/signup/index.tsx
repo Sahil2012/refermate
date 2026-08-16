@@ -23,7 +23,7 @@ export default function SignupPage() {
   if (pendingVerification) {
     return (
       <Card>
-        <CardHeader className="mb-2">
+        <CardHeader className="mb-2 text-center">
           <CardTitle>Check your email</CardTitle>
           <CardDescription>
             We sent a verification code to{" "}
@@ -48,7 +48,7 @@ export default function SignupPage() {
 
   return (
     <Card>
-      <CardHeader className="mb-2">
+      <CardHeader className="mb-2 text-center">
         <CardTitle>Create an account</CardTitle>
         <CardDescription>
           Enter your email below to create your account
