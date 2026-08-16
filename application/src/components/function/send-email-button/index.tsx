@@ -14,9 +14,9 @@ const SendEmailButton = ({
   manageThread,
   onSend,
 }: SendEmailButtonProps) => {
-  const { isConnectedToGoogle } = useGoogle();
+  const { hasGmailScope } = useGoogle();
 
-  const Comp = isConnectedToGoogle ? (
+  const Comp = hasGmailScope ? (
     <SendEmail id={id} manageThread={manageThread} onSend={onSend} />
   ) : (
     <ConnectToGmailButton />
