@@ -37,7 +37,10 @@ export const useAuthActions = () => {
     async () => {
       const params = {
         redirectUrl: globalThis.location.href,
-        additionalScopes: ["https://www.googleapis.com/auth/gmail.modify"],
+        additionalScopes: [
+          "https://www.googleapis.com/auth/gmail.send",
+          "https://www.googleapis.com/auth/gmail.readonly",
+        ],
         oidcPrompt: "consent",
         access_type: "offline",
       };

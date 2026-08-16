@@ -7,8 +7,12 @@ export const useGoogle = () => {
     (acc) => acc.provider === "google",
   );
 
-  const hasGmailScope = !!googleAccount?.approvedScopes?.includes(
-    "https://www.googleapis.com/auth/gmail.modify",
+  const requiredGmailScopes = [
+    "https://www.googleapis.com/auth/gmail.send",
+    "https://www.googleapis.com/auth/gmail.readonly",
+  ];
+  const hasGmailScope = requiredGmailScopes.every((scope) =>
+    googleAccount?.approvedScopes?.includes(scope),
   );
 
   const isConnectedToGoogle = !!googleAccount;
