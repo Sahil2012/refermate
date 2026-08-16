@@ -34,7 +34,7 @@ export const EmailEditor: React.FC<EmailEditorProps> = ({
           id="email-body"
           value={body}
           onChange={(e) => onBodyChange(e.target.value)}
-          className="min-h-sm resize-y"
+          className="min-h-72 resize-y"
           placeholder="Enter email body"
         />
       </div>
