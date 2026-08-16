@@ -55,8 +55,8 @@ export function Sidebar({ className }: { className?: string }) {
     <div className={cn("pb-12 min-h-screen", className)}>
       <div className="space-y-4 py-6">
         <div className="px-3 py-2">
-          <Link to="/" className="flex items-center gap-2 px-4 mb-8">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl">
+          <Link to="/" className="flex items-center gap-2 px-4 mb-4">
+            <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
               O
             </div>
             <span className="text-xl font-bold tracking-tight">Outreach</span>
