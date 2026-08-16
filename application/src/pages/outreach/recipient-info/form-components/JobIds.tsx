@@ -14,17 +14,19 @@ const JobIds = ({
 }: FormComponentProps<string | string[]>) => {
   const [currentJobId, setCurrentJobId] = useState("");
 
-  if (!value || typeof value === "string") return null;
+  if (typeof value === "string") return null;
+
+  const jobIds = value ?? [];
 
   const handleAddJobId = () => {
-    if (currentJobId.trim() && !value.includes(currentJobId.trim())) {
-      onChange([...value, currentJobId.trim()]);
+    if (currentJobId.trim() && !jobIds.includes(currentJobId.trim())) {
+      onChange([...jobIds, currentJobId.trim()]);
       setCurrentJobId("");
     }
   };
 
   const handleRemoveJobId = (jobIdToRemove: string) => {
-    onChange(value.filter((id) => id !== jobIdToRemove));
+    onChange(jobIds.filter((id) => id !== jobIdToRemove));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -57,7 +59,7 @@ const JobIds = ({
         </Button>
       </div>
       <div className="flex flex-wrap gap-2 mt-2">
-        {value.map((jobId, index) => (
+        {jobIds.map((jobId, index) => (
           <Badge
             key={index}
             variant="secondary"
@@ -73,7 +75,7 @@ const JobIds = ({
             </button>
           </Badge>
         ))}
-        {value.length === 0 && (
+        {jobIds.length === 0 && (
           <p className="text-sm text-muted-foreground pl-2">
             No job IDs added yet.
           </p>
