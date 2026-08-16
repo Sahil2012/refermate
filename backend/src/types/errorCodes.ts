@@ -53,6 +53,7 @@ export enum ErrorCode {
     GMAIL_API_ERROR = "GMAIL_API_ERROR",
     GOOGLE_API_ERROR = "GOOGLE_API_ERROR",
     EMAIL_SEND_FAILED = "EMAIL_SEND_FAILED",
+    LLM_GENERATION_FAILED = "LLM_GENERATION_FAILED",
 
     // 503 - Service Unavailable
     SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE",
@@ -123,6 +124,7 @@ export const ErrorCodeMetadata: Record<ErrorCode, { httpStatus: number; defaultM
     [ErrorCode.GMAIL_API_ERROR]: { httpStatus: 502, defaultMessage: "Gmail API error" },
     [ErrorCode.GOOGLE_API_ERROR]: { httpStatus: 502, defaultMessage: "Google API error" },
     [ErrorCode.EMAIL_SEND_FAILED]: { httpStatus: 502, defaultMessage: "Failed to send email" },
+    [ErrorCode.LLM_GENERATION_FAILED]: { httpStatus: 502, defaultMessage: "Failed to generate email content" },
 
     // 503
     [ErrorCode.SERVICE_UNAVAILABLE]: { httpStatus: 503, defaultMessage: "Service unavailable" },

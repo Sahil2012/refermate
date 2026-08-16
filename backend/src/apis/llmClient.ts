@@ -1,5 +1,6 @@
 import { logger } from "../utils/logger.js";
-import { RateLimitExceededError } from "../types/HttpError.js";
+import { ExternalServiceError, RateLimitExceededError } from "../types/HttpError.js";
+import { ErrorCode } from "../types/errorCodes.js";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import modelConfigs from "./modelConfig.js";
 
@@ -41,7 +42,11 @@ async function callLLM(prompt: string): Promise<string> {
         throw new RateLimitExceededError("Rate limit exceeded");
     }
 
-    throw exception || new Error("No LLM is available to serve the request");
+    throw new ExternalServiceError(
+        `Failed to generate email content: ${exception?.message || "No LLM is available to serve the request"}`,
+        ErrorCode.LLM_GENERATION_FAILED,
+        { errorDetails: exception?.message }
+    );
 }
 
 export default callLLM;

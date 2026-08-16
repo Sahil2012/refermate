@@ -7,6 +7,8 @@ import callLLM from "../../../apis/llmClient.js";
 import { TailoredEmailRequest } from "../../../types/GenerateMailRequest.js";
 import prisma from "../../../apis/prismaClient.js";
 import { logger } from "../../../utils/logger.js";
+import { ExternalServiceError } from "../../../types/HttpError.js";
+import { ErrorCode } from "../../../types/errorCodes.js";
 
 export const tailoredEmailStrategy = async (
   emailRequest: TailoredEmailRequest
@@ -38,5 +40,15 @@ export const tailoredEmailStrategy = async (
     })
   );
   logger.info(`RAW LLM response: ${res}`);
-  return await parser.parse(res);
+
+  try {
+    return await parser.parse(res);
+  } catch (error: any) {
+    logger.error(`Failed to parse LLM response for user ${userId}`, error);
+    throw new ExternalServiceError(
+      `Failed to parse generated email content: ${error.message}`,
+      ErrorCode.LLM_GENERATION_FAILED,
+      { userId, errorDetails: error.message, rawResponse: res }
+    );
+  }
 };
