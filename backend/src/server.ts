@@ -14,22 +14,29 @@ configDotenv();
 const PORT = process.env.PORT;
 const app = express();
 
+// Render's health check hits this path and expects a 2xx response.
+app.get("/", (req, res) => {
+  res.status(200).send("ok");
+});
+
 // Use Middlewares
 app.use(clerkMiddleware({ debug: process.env.NODE_ENV === "development" }));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 
 // TODO : update cors
 app.use(cors({}));
 
-// Routers
+// Mounted before the global body parsers below: the Clerk webhook route needs
+// the raw request body for svix signature verification, which the global
+// express.json() would otherwise consume first.
 app.use("/auth", authRoutes);
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Routers
 app.use("/profile", requireAuth, rateLimiter, profileRouter);
 app.use("/threads", requireAuth, rateLimiter, threadRoutes);
 app.use("/messages", requireAuth, rateLimiter, messageRoutes);
-app.get("/", (_, res) => {
-  res.send("Server running");
-});
 
 // 404 handler for undefined routes (must be after all route definitions)
 app.use(notFoundHandler);

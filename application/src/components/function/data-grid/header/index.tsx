@@ -20,10 +20,10 @@ const TableHeader = <T extends string>({
   description,
 }: TableHeaderProps<T>) => {
   return (
-    <CardHeader className="border-b border-border/40 px-6 py-6 !pb-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <CardHeader className="border-b border-border/40 px-6 py-6 !pb-4 justify-stretch">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
         <div>
-          <CardTitle className="text-xl">{header}</CardTitle>
+          <CardTitle className="text-xl text-left">{header}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </div>
         <div className="flex items-center gap-3">
