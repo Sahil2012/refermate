@@ -2,9 +2,11 @@
 
 > Job seekers get referrals by messaging employees at target companies. ReferMate automates the grind: it reads the job description, your resume, and the company context, then generates referral requests and follow-ups that don't sound like templates — and sends them from your own Gmail.
 
-**Live:** [refermate.novacraftsai.com](https://refermate.novacraftsai.com/) · **Walkthrough:** _[2-min video — coming soon]_
+**Live:** [refermate.novacraftsai.com](https://refermate.novacraftsai.com/)
 
-<!-- TODO(media): hero screenshot or 20-sec GIF of generating a message -->
+![Walkthrough](docs/media/walkthrough.gif)
+
+_Full-quality version: [walkthrough.mov](docs/media/walkthrough.mov)_
 
 ## Why this exists
 
