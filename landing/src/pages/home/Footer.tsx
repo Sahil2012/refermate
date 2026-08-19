@@ -46,26 +46,11 @@ export default function Footer() {
 
           <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground font-medium">
-              © {new Date().getFullYear()} Outreach. All rights reserved.
+              © {new Date().getFullYear()} ReferMate. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a
-                href="https://x.com/guptasahil7/"
-                target="_blank"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <span className="sr-only">X</span>
-                <svg
-                  className="h-5 w-5"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M18.244 2H21l-6.518 7.455L22 22h-6.828l-5.35-7.01L3.68 22H1l6.972-7.977L2 2h6.828l4.833 6.385L18.244 2zm-1.193 18h1.53L7.83 4h-1.6l10.82 16z" />
-                </svg>
-              </a>
-              <a
-                href="https://github.com/Sahil2012/outreach/"
+                href="https://github.com/Sahil2012/refermate/"
                 target="_blank"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
